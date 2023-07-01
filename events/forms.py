@@ -4,7 +4,7 @@ from edge.models import Event, Booking
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ('title', 'date', 'location', 'category', 'description', 'price')
+        fields = ('title', 'date', 'location', 'category', 'description', 'ticket_price', 'time', 'organizer', )
 
 class BookingForm(forms.ModelForm):
     class Meta:

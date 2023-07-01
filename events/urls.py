@@ -36,7 +36,7 @@ urlpatterns = [
     path('organizer/events/<int:pk>/venue/', views.venue_management, name='venue_management'),
 
     # Api URLS
-      path('api/events/', EventListAPIView.as_view(), name='event-list'),
+    path('api/events/', EventListAPIView.as_view(), name='event-list'),
     path('api/events/<int:pk>/', EventDetailAPIView.as_view(), name='event-detail'),
     path('api/bookings/', BookingCreateAPIView.as_view(), name='booking-create'),
     path('api/bookings/<int:pk>/', BookingDetailAPIView.as_view(), name='booking-detail'),

@@ -73,7 +73,8 @@ class Event(models.Model):
     organizer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='organized_events'
+        related_name='organized_events',
+        default='Unknown'
     )
     ticket_price = models.DecimalField(max_digits=8, decimal_places=2, null=True)
     venue_name = models.CharField(max_length=100, default='Venue name not yet listed')
