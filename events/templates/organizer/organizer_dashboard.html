@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Organizer Dashboard</h2>
+  <ul>
+    {% for event in events %}
+      <li>{{ event.title }}</li>
+    {% empty %}
+      <li>No events available.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
