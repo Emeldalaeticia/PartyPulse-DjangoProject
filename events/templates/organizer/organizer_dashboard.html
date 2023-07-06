@@ -4,9 +4,10 @@
   <h2>Organizer Dashboard</h2>
   <ul>
     {% for event in events %}
-      <li>{{ event.title }}</li>
+      <li><a href="{% url 'events:event_detail' pk=event.pk %}">{{ event.title }}</a></li>
     {% empty %}
       <li>No events available.</li>
     {% endfor %}
   </ul>
+  <a href="{% url 'events:event_create'  %}" class="btn btn-primary"> Create Event</a>
 {% endblock %}

@@ -1,7 +1,5 @@
-# events/views.py
-
 from django.shortcuts import render, get_object_or_404, redirect
-from edge.models import Event, Booking, User
+from edge.models import Event, Booking
 from .forms import EventForm, BookingForm, VenueForm
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
@@ -13,8 +11,11 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user
 
-
+User = get_user_model()
 
 class EventListAPIView(APIView):
     authentication_classes = [TokenAuthentication]
@@ -73,7 +74,7 @@ def organizer_dashboard(request):
 @login_required
 def event_create(request):
     if request.method == 'POST':
-        form = EventForm(request.POST)
+        form = EventForm(request.POST, request.FILES)
         if form.is_valid():
             event = form.save(commit=False)
             event.organizer = request.user
@@ -175,28 +176,36 @@ def sales_report(request):
 @login_required
 def book_event(request, pk):
     event = get_object_or_404(Event, pk=pk)
+
     if request.method == 'POST':
         form = BookingForm(request.POST)
         if form.is_valid():
             booking = form.save(commit=False)
-            booking.user = request.user # Assuming the user is authenticated
+            user = User.objects.get(pk=request.user.pk)  # Retrieve the User instance from the database
+            booking.user = user
             booking.event = event
             booking.save()
-            
+
             send_mail(
                 'Booking Confirmation',
                 'Thank you for booking!',
                 'sender@example.com',
-                [request.user.email],  # Assuming the user has an email field
+                [booking.user.email],
                 fail_silently=True,
             )
-            return redirect('events:booking_confirmation', pk=booking.pk)
-        else:
-            form = BookingForm()
-        return redirect(request, 'events/book_event.html', {'form': form, 'event': event})
 
+            return redirect('events:booking_confirmation', pk=booking.pk)
+    else:
+        form = BookingForm()
+
+    return render(request, 'events/book_event.html', {'form': form, 'event': event})
 
 @login_required
 def booking_confirmation(request, pk):
     booking = get_object_or_404(Booking, pk=pk)
     return render(request, 'events/booking_confirmation.html', {'booking': booking})
+
+@login_required
+def booking_list(request):
+    bookings = Booking.objects.filter(user=request.user)
+    return render(request, 'events/booking_list.html', {'bookings': bookings})

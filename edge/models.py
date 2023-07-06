@@ -1,13 +1,15 @@
-from django.conf import settings
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.validators import MinValueValidator
 from phonenumber_field.modelfields import PhoneNumberField
+from cloudinary.models import CloudinaryField
+from django.conf import settings
+from django.contrib.auth import get_user_model
 
 
 
 class UserType(models.TextChoices):
-    ADMIN = 'admin', 'Admin'
     ORGANIZER = 'organizer', 'Organizer'
     USER = 'user', 'User'
 
@@ -66,10 +68,10 @@ class Event(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
     date = models.DateField()
     time = models.TimeField()
-    image = models.ImageField(upload_to='static/event_images/%Y/%m/%d')
+    image = CloudinaryField('image')
 
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    category = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
     organizer = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -85,7 +87,7 @@ class Event(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profile')
     profile_picture = models.ImageField(upload_to='user_profiles')
     contact_number = PhoneNumberField()
 
@@ -94,7 +96,7 @@ class UserProfile(models.Model):
 
 
 class Booking(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings')
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='bookings')
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
     ticket_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)

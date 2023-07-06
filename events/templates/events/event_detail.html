@@ -9,4 +9,12 @@
   <p>Price: {{ event.ticket_price }}</p>
   <p>Time: {{ event.time }}</p>
   <p>Organizer: {{ event.organizer }}</p>
+  <p>Image: {{ event.image.url }}</p>
+  <img src="{{ event.image.url }}" alt="" width="300">
+
+  <a href="{% url 'events:book_event' event.pk %}" class="btn btn-primary">Book Event</a>
+  {% if request.user.is_authenticated and request.user == event.organizer %}
+    <a href="{% url 'events:event_update' pk=event.pk %}" class="btn btn-primary">Update Event</a>
+    <a href="{% url 'events:event_delete' pk=event.pk %}" class="btn btn-primary">Delete Event</a>
+  {% endif %}
 {% endblock %}

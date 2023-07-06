@@ -8,5 +8,8 @@
     {% empty %}
       <li>No events available.</li>
     {% endfor %}
+    {% if request.user == organizer  %}
+    <a href="{% url 'events:event_create' pk=event.pk %}" class="btn btn-primary">Create Event</a>
+    {% endif %}
   </ul>
 {% endblock %}
