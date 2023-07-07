@@ -2,7 +2,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.core.validators import MinValueValidator
-from phonenumber_field.modelfields import PhoneNumberField
 from cloudinary.models import CloudinaryField
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -86,13 +85,7 @@ class Event(models.Model):
         return self.title
 
 
-class UserProfile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profile')
-    profile_picture = models.ImageField(upload_to='user_profiles')
-    contact_number = PhoneNumberField()
 
-    def __str__(self):
-        return self.user.username
 
 
 class Booking(models.Model):

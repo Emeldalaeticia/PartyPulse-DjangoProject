@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from edge.models import User, Category, Location, Event, UserProfile, Booking
+from edge.models import User, Category, Location, Event,  Booking
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -26,10 +26,6 @@ class EventSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserProfileSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserProfile
-        fields = '__all__'
 
 
 class BookingSerializer(serializers.ModelSerializer):

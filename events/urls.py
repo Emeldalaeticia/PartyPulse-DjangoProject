@@ -22,6 +22,8 @@ urlpatterns = [
     path('events/<int:pk>/book/', views.book_event, name='book_event'),
     path('booking/<int:pk>/confirmation/', views.booking_confirmation, name='booking_confirmation'),
     path('bookings/', views.booking_list, name='booking_list'),
+    path('bookings/<int:booking_id>/delete/', views.delete_booking, name='delete_booking'),
+    
     # Organizer URLs
     path('organizer/dashboard/', views.organizer_dashboard, name='organizer_dashboard'),
     path('organizer/events/create/', views.event_create, name='organizer_event_create'),

@@ -13,7 +13,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-from django.contrib.auth import get_user
 
 User = get_user_model()
 
@@ -67,6 +66,7 @@ def event_detail(request, pk):
 
 @login_required
 def organizer_dashboard(request):
+    
     # Get the events created by the logged-in user (organizer)
     events = Event.objects.filter(organizer=request.user)
     return render(request, 'organizer/organizer_dashboard.html', {'events': events})
@@ -209,3 +209,11 @@ def booking_confirmation(request, pk):
 def booking_list(request):
     bookings = Booking.objects.filter(user=request.user)
     return render(request, 'events/booking_list.html', {'bookings': bookings})
+
+@login_required
+def delete_booking(request, booking_id):
+    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    if request.method == 'POST':
+        booking.delete()
+        return redirect('events:booking_list')
+    return render(request, 'events/delete_booking.html', {'booking': booking})

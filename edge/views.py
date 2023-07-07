@@ -1,7 +1,7 @@
 
-from .models import UserProfile, UserType
+from .models import  UserType
 from django.shortcuts import render, redirect
-from .forms import UserRegistrationForm, UserLoginForm, UserProfileForm
+from .forms import UserRegistrationForm, UserLoginForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_protect
@@ -55,19 +55,3 @@ def user_logout(request):
     logout(request)
     return redirect('events:event_list')
 
-@login_required
-def profile(request):
-    try:
-        profile = UserProfile.objects.get(user=request.user)
-    except ObjectDoesNotExist:
-        profile = None
-
-    if request.method == 'POST':
-        form = UserProfileForm(request.POST, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect('profile')
-    else:
-        form = UserProfileForm(instance=profile)
-    
-    return render(request, 'edge/profile.html', {'form': form})
