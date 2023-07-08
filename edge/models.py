@@ -92,6 +92,8 @@ class Booking(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='bookings')
     quantity = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    total_amount = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
     ticket_price = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     payment_details = models.CharField(max_length=255)
 

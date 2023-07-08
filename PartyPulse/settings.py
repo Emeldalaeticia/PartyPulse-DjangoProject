@@ -46,6 +46,10 @@ INSTALLED_APPS = [
     'events',
     'rest_framework',
     'rest_framework_simplejwt',
+
+    # Payment intergration
+    'paypal.standard.ipn',
+
 ]
 
 REST_FRAMEWORK = {
@@ -166,3 +170,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+PAYPAL_RECEIVER_EMAIL = 'sb-qemyg26556601@business.example.com'
+
+PAYPAL_TEST = True

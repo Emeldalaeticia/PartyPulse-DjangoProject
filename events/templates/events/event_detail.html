@@ -25,7 +25,7 @@
   </div>
 </div>
 <br>
-  <a href="{% url 'events:book_event' event.pk %}" class="btn btn-primary">Book Event</a>
+  <a href="{% url 'events:book_event' event_id=event.id %}" class="btn btn-primary">Book Event</a>
 </div>
   
   {% if request.user.is_authenticated and request.user == event.organizer %}

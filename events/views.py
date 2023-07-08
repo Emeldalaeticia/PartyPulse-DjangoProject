@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from edge.models import Event, Booking
 from .forms import EventForm, BookingForm, VenueForm
-from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from rest_framework import generics
@@ -13,6 +12,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from django.urls import reverse
+from django.conf import settings
+from decimal import Decimal
+from paypal.standard.forms import PayPalPaymentsForm
+from django.views.decorators.csrf import csrf_exempt
 
 User = get_user_model()
 
@@ -174,31 +178,48 @@ def sales_report(request):
     return render(request, 'organizer/sales_report.html', {'report_data': report_data})
 
 @login_required
-def book_event(request, pk):
-    event = get_object_or_404(Event, pk=pk)
+def process_payment(request):
+    booking_id = request.session.get('booking_id')
+    booking = get_object_or_404(Booking, id=booking_id)
+    host = request.get_host()
+
+    paypal_dict = {
+        'business': settings.PAYPAL_RECEIVER_EMAIL,
+        'amount': '%.2f' % booking.total_amount.quantize(Decimal('.01')),
+        'item_name': 'Booking {}'.format(booking.id),
+        'invoice': str(booking.id),
+        'currency_code': 'USD',  # Replace with your country's currency code if needed
+        'notify_url': 'http://{}{}'.format(host, reverse('events:paypal-ipn')),
+        'return_url': 'http://{}{}'.format(host, reverse('events:payment_completed')),
+        'cancel_return': 'http://{}{}'.format(host, reverse('events:payment_failed')),
+    }
+
+    form = PayPalPaymentsForm(initial=paypal_dict)
+    return render(request, 'events/process_payment.html', {'booking': booking, 'form': form})
+
+
+@login_required
+def book_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
 
     if request.method == 'POST':
         form = BookingForm(request.POST)
+
         if form.is_valid():
             booking = form.save(commit=False)
-            user = User.objects.get(pk=request.user.pk)  # Retrieve the User instance from the database
-            booking.user = user
+            quantity = booking.quantity
+            total_amount = event.price * Decimal(quantity)
             booking.event = event
+            booking.user = request.user
+            booking.total_amount = total_amount
             booking.save()
-
-            send_mail(
-                'Booking Confirmation',
-                'Thank you for booking!',
-                'sender@example.com',
-                [booking.user.email],
-                fail_silently=True,
-            )
-
-            return redirect('events:booking_confirmation', pk=booking.pk)
+            
+            request.session['booking_id'] = booking.id
+            return redirect('events:process_payment')
     else:
         form = BookingForm()
 
-    return render(request, 'events/book_event.html', {'form': form, 'event': event})
+    return render(request, 'events/book_event.html', {'event': event, 'form': form})
 
 @login_required
 def booking_confirmation(request, pk):
@@ -217,3 +238,12 @@ def delete_booking(request, booking_id):
         booking.delete()
         return redirect('events:booking_list')
     return render(request, 'events/delete_booking.html', {'booking': booking})
+
+
+@csrf_exempt
+def payment_completed(request):
+    return render(request, 'events/payment_completed.html')
+
+@csrf_exempt
+def payment_failed(request):
+    return render(request, 'events/payment_failed.html')

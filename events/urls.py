@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 from .views import (
     EventListAPIView,
@@ -19,7 +19,7 @@ urlpatterns = [
     path('<int:pk>/delete/', views.event_delete, name='event_delete'),
 
     # Booking URLs
-    path('events/<int:pk>/book/', views.book_event, name='book_event'),
+    path('book/<int:event_id>/', views.book_event, name='book_event'),
     path('booking/<int:pk>/confirmation/', views.booking_confirmation, name='booking_confirmation'),
     path('bookings/', views.booking_list, name='booking_list'),
     path('bookings/<int:booking_id>/delete/', views.delete_booking, name='delete_booking'),
@@ -32,6 +32,11 @@ urlpatterns = [
     path('organizer/events/<int:pk>/sales/', views.sales_report, name='organizer_sales_tracking'),
     path('organizer/events/<int:pk>/venue/', views.venue_management, name='organizer_venue_management'),
 
+    # Payment Urls
+    path('paypal/', include('paypal.standard.ipn.urls')),
+    path('payment/completed/', views.payment_completed, name='payment_completed'),
+    path('payment/failed/', views.payment_failed, name='payment_failed'),
+    path('process-payment/', views.process_payment, name='process_payment'),
     # Api URLS
     path('api/events/', EventListAPIView.as_view(), name='event-list'),
     path('api/events/<int:pk>/', EventDetailAPIView.as_view(), name='event-detail'),

@@ -9,7 +9,7 @@ class EventForm(forms.ModelForm):
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ('quantity', 'payment_details')
+        fields = ('quantity',)
 
 class TicketPriceForm(forms.Form):
     ticket_price = forms.DecimalField(label='Ticket Price', decimal_places=2, min_value=0)

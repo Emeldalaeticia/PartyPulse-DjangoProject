@@ -5,7 +5,6 @@
 <figure class="text-center">
   <blockquote class="blockquote">
     <h2 class="text-success" style="font-style: italic; font-weight: lighter;">I'm a party waiting to happen.</h2>
-  
   </blockquote>
   <figcaption class="blockquote-footer">
     <cite title="Source Title" class="text-light" style="font-weight: bold;">Carrie Fisher</cite>
@@ -14,21 +13,38 @@
 
 <div class="card text-white bg-secondary mb-3" style="width: 20em; border-radius: 40px; display: grid; place-items: center;">
   <div class="card-header">Book Event: {{ event.title }}</div>
-  <div class="card-body">
-    <form method="POST">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit" class="btn btn-primary" style="justify-content: center;">Book Now</button>
-    </form>
-  </div>
-{% endblock %}
 
-<div class="card text-white bg-secondary mb-3" style="max-width: 300px; border-radius: 40px; margin-left: 270px; margin-top: 100px; margin-right: 0; margin-bottom: 0;">
-  <div class="card-header">Book Event: {{ event.title }}</div>
   <div class="card-body">
-    <form method="post">
+    <form method="POST" action="{% url 'events:book_event' event_id=event.id %}">
       {% csrf_token %}
+      
       {{ form.as_p }}
-      <button type="submit" class="btn btn-danger" style="justify-content: center;">Book Now</button>
+      
+      <div>
+        <button type="submit" class="btn btn-primary">Book Now</button>
+      </div>
+      
+      <p>Total Amount: $<span id="total-amount">{{ event.price }}</span></p>
+      <input type="hidden" id="quantity" name="quantity" value="1">
+      <input type="hidden" name="total_amount" id="total-amount-input" value="{{ event.price }}">
     </form>
-  </div>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const quantityInput = document.getElementById('id_quantity');
+        const totalAmountInput = document.getElementById('total-amount-input');
+        const totalAmountSpan = document.getElementById('total-amount');
+        
+        quantityInput.addEventListener('input', () => {
+          const quantity = parseInt(quantityInput.value);
+          const price = parseFloat(totalAmountSpan.textContent);
+          const totalAmount = quantity * price;
+          
+          totalAmountInput.value = totalAmount.toFixed(2);
+          totalAmountSpan.textContent = totalAmount.toFixed(2);
+        });
+      });
+    </script>
+    
+
+{% endblock %}
