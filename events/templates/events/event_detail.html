@@ -1,20 +1,51 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>{{ event.title }}</h2>
-  <p>Date: {{ event.date }}</p>
-  <p>Location: {{ event.location }}</p>
-  <p>Category: {{ event.category }}</p>
-  <p>Description: {{ event.description }}</p>
-  <p>Price: {{ event.ticket_price }}</p>
-  <p>Time: {{ event.time }}</p>
-  <p>Organizer: {{ event.organizer }}</p>
-  <p>Image: {{ event.image.url }}</p>
-  <img src="{{ event.image.url }}" alt="" width="300">
 
+<h3> {{ event.title }}</h3>
+
+<div class="toast show alert-warning " role="alert" aria-live="assertive" aria-atomic="true" style="border-radius: 13px;" >
+  <div class="toast-header">
+    <strong class="me-auto text-dark"  >Location: {{ event.location }}</strong>
+    <small style="font-weight: bolder;">Time: {{ event.time }}</small>
+      <span aria-hidden="true"> </span>
+    </button>
+  </div>
+  <div class="toast-body">
+    Category: {{ event.category }}
+  </div>
+  <div class="toast-body">
+    Price: {{ event.ticket_price }}
+  </div>
+  <div class="toast-body">
+    Organizer: {{ event.organizer }}
+  </div>
+  <div class="toast-body">
+    Description: {{ event.description }}
+  </div>
+</div>
+<br>
   <a href="{% url 'events:book_event' event.pk %}" class="btn btn-primary">Book Event</a>
+</div>
+  
   {% if request.user.is_authenticated and request.user == event.organizer %}
     <a href="{% url 'events:event_update' pk=event.pk %}" class="btn btn-primary">Update Event</a>
     <a href="{% url 'events:event_delete' pk=event.pk %}" class="btn btn-primary">Delete Event</a>
   {% endif %}
 {% endblock %}
+
+<table class="table table-hover">
+  <thead >
+    <tr>
+      <th scope="col">{{ event.title }}</th>
+      <th scope="col">Date: {{ event.date }}</th>
+      <th scope="col">Location: {{ event.location }}</th>
+      <th scope="col">Category: {{ event.category }}</th>
+      <th scope="col">Description: {{ event.description }}</th>
+      <th scope="col">Price: {{ event.ticket_price }}</th>
+      <th scope="col">Organizer: {{ event.organizer }}</th>
+      <th scope="col">Image: {{ event.image.url }} <img src="{{ event.image.url }}" alt="" width="300"></th>
+      <th scope="col"><span class="badge bg-primary "><a href="{% url 'events:book_event' event.pk %}" class="btn btn-primary">Book Event</a></span></th>
+
+    </tr>
+  </thead>

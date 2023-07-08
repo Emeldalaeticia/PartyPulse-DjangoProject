@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Upcoming Events</h2>
-  <ul>
+  <h2 class="text-warning" >Upcoming Events</h2>
+  
+  <ul class="list-group" style="max-width: 400px;">
     {% for event in events %}
-      <li><a href="{% url 'events:event_detail' pk=event.pk %}">{{ event.title }}</a></li>
+      <li class="list-group-item d-flex justify-content-around align-items-center"><a href="{% url 'events:event_detail' pk=event.pk %} " class="text-dark" style="font-weight: bold;"> {{ event.title }}</a><span class="badge bg-danger ">{{ event.date }}</span></li>
     {% empty %}
       <li>No events available.</li>
     {% endfor %}
@@ -13,3 +14,4 @@
     {% endif %}
   </ul>
 {% endblock %}
+
