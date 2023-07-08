@@ -8,12 +8,15 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.contrib import messages
-
+from django.template import loader
+from django.http import HttpResponse
 # Create your views here.
 
 
 def home(request):
-    return render(request, 'edge/home.html')
+    template = loader.get_template('edge/home.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
 
 def register(request):
     if request.method == 'POST':

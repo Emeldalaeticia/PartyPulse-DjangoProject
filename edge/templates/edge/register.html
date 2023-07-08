@@ -2,12 +2,26 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Register</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-  </form>
+
+<figure class="text-center">
+  <blockquote class="blockquote">
+    <h2 class="text-warning" style="font-style: italic; font-weight: lighter;">I'm not a party animal, I'm a party panda. There's a difference.</h2>
+  
+  </blockquote>
+  <figcaption class="blockquote-footer">
+    <cite title="Source Title" class="text-light" style="font-weight: bold;">Someone Famous</cite>
+  </figcaption>
+</figure>
+
+<div class="card text-white bg-secondary mb-3" style="max-width: 500px; border-radius: 40px; margin-left: 270px; margin-top: 100px; margin-right: 0; margin-bottom: 0;">
+  <div class="card-header" style="font-size: large; ">Register</div>
+  <div class="card-body">
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-danger" style="justify-content: center;">Register</button>
+    </form>
+  </div>
   {% if messages %}
     <ul class="messages">
         {% for message in messages %}
@@ -16,3 +30,4 @@
     </ul>
   {% endif %}
 {% endblock %}
+
