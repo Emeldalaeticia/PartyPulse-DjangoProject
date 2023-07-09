@@ -19,8 +19,15 @@ from django.urls import path, include
 from edge import views
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
+from events.views import (
+    EventListAPIView,
+    EventDetailAPIView,
+    BookingCreateAPIView,
+    BookingDetailAPIView,
+    UserDetailAPIView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +36,14 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('events/', include('events.urls')),
     
+ # Api URLS
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/events/', EventListAPIView.as_view(), name='event-list'),
+    path('api/events/<int:pk>/', EventDetailAPIView.as_view(), name='event-detail'),
+    path('api/bookings/', BookingCreateAPIView.as_view(), name='booking-create'),
+    path('api/bookings/<int:pk>/', BookingDetailAPIView.as_view(), name='booking-detail'),
+    path('api/users/<int:pk>/', UserDetailAPIView.as_view(), name='user-detail'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

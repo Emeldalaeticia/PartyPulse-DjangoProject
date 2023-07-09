@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<div style="position: absolute; top: 30%; left: 55%; width: 25em; " >
+  <h1 class="text-dark" > Every Party needs a YOU in it</h1>
+  <p style="font-style: oblique; font-size: large; "> ~Check out the availabe events an book your tickets today</p>
+</div>
+
   <h2 class="text-warning" >Upcoming Events</h2>
   
   <ul class="list-group" style="max-width: 400px;">
     {% for event in events %}
-      <li class="list-group-item d-flex justify-content-around align-items-center"><a href="{% url 'events:event_detail' pk=event.pk %} " class="text-dark" style="font-weight: bold;"> {{ event.title }}</a><span class="badge bg-danger ">{{ event.date }}</span></li>
+      <li class="list-group-item d-flex justify-content-around align-items-center"><a href="{% url 'events:event_detail' pk=event.pk %} " class="text-dark" style="font-weight: bold;"> {{ event.title }}</a><span class="badge bg-danger ">{{ event.date }}</span> </li>
+      <span class="badge bg-secondary"> <h6 class="text-dark"> Organizer : {{ event.organizer }} </h6></span>
     {% empty %}
       <li>No events available.</li>
     {% endfor %}

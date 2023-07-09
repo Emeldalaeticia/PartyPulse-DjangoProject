@@ -1,12 +1,6 @@
 from django.urls import path, include
 from . import views
-from .views import (
-    EventListAPIView,
-    EventDetailAPIView,
-    BookingCreateAPIView,
-    BookingDetailAPIView,
-    UserDetailAPIView,
-)
+
 
 app_name = 'events'
 
@@ -37,10 +31,6 @@ urlpatterns = [
     path('payment/completed/', views.payment_completed, name='payment_completed'),
     path('payment/failed/', views.payment_failed, name='payment_failed'),
     path('process-payment/', views.process_payment, name='process_payment'),
-    # Api URLS
-    path('api/events/', EventListAPIView.as_view(), name='event-list'),
-    path('api/events/<int:pk>/', EventDetailAPIView.as_view(), name='event-detail'),
-    path('api/bookings/', BookingCreateAPIView.as_view(), name='booking-create'),
-    path('api/bookings/<int:pk>/', BookingDetailAPIView.as_view(), name='booking-detail'),
-    path('api/users/<int:pk>/', UserDetailAPIView.as_view(), name='user-detail'),
+    
+   
 ]

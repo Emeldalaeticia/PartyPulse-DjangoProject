@@ -27,25 +27,15 @@
 <br>
   <a href="{% url 'events:book_event' event_id=event.id %}" class="btn btn-primary">Book Event</a>
 </div>
-  
+<br>
   {% if request.user.is_authenticated and request.user == event.organizer %}
-    <a href="{% url 'events:event_update' pk=event.pk %}" class="btn btn-primary">Update Event</a>
-    <a href="{% url 'events:event_delete' pk=event.pk %}" class="btn btn-primary">Delete Event</a>
-  {% endif %}
+    <div style="position:relative; left: 5%;" >
+      <a href="{% url 'events:event_update' pk=event.pk %}" class="btn btn-primary" style="justify-content: center;">Update Event</a>
+    </div>
+    <br>
+    <div style="position: absolute; left: 5%;">
+      <a href="{% url 'events:event_delete' pk=event.pk %}" class="btn btn-primary">Delete Event</a>
+    </div>
+    {% endif %}
 {% endblock %}
 
-<table class="table table-hover">
-  <thead >
-    <tr>
-      <th scope="col">{{ event.title }}</th>
-      <th scope="col">Date: {{ event.date }}</th>
-      <th scope="col">Location: {{ event.location }}</th>
-      <th scope="col">Category: {{ event.category }}</th>
-      <th scope="col">Description: {{ event.description }}</th>
-      <th scope="col">Price: {{ event.ticket_price }}</th>
-      <th scope="col">Organizer: {{ event.organizer }}</th>
-      <th scope="col">Image: {{ event.image.url }} <img src="{{ event.image.url }}" alt="" width="300"></th>
-      <th scope="col"><span class="badge bg-primary "><a href="{% url 'events:book_event' event.pk %}" class="btn btn-primary">Book Event</a></span></th>
-
-    </tr>
-  </thead>

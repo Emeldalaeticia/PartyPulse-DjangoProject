@@ -5,6 +5,7 @@
     <p>Are you sure you want to delete the booking for {{ booking.event.title }}?</p>
     <form method="post">
         {% csrf_token %}
-        <button type="submit">Delete</button>
+        <button type="submit" class="btn btn-outline-dark">Delete</button>
+        <a href="/" class="btn btn-outline-primary">No go back to Home</a>
     </form>
 {% endblock %}

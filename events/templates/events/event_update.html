@@ -1,10 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Update Event</h2>
-  <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Update</button>
-  </form>
+<div style="display: flex; justify-content: center; align-items: center;">
+  <div class="card text-white bg-secondary mb-3" style="width: 500px;" >
+    <div class="card-header "> <h2>Update Event </h2></div>
+      <div class="card-body">
+        <form method="POST" style="display: flex; flex-direction: column; justify-content: center;  ">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-danger">Update</button>
+        </form>
+      </div>
+  </div>
+</div>
 {% endblock %}
+

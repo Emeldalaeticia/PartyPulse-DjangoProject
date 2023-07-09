@@ -1,10 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Delete Event</h2>
-  <p>Are you sure you want to delete "{{ event.title }}"?</p>
-  <form method="POST">
-    {% csrf_token %}
-    <button type="submit">Delete</button>
-  </form>
+
+  <div class="card text-white bg-secondary mb-3" style="max-width: 20rem;">
+    <div class="card-header"><p>Are you sure you want to delete "{{ event.title }}"?</p></div>
+    <div class="card-body">
+      <form method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-dark">Delete</button>
+        <br>
+        <a href="/" class="btn btn-primary">No go back to Home</a>
+      </form>
+    </div>
+  </div>
+
 {% endblock %}
+

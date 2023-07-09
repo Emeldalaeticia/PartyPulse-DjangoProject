@@ -23,7 +23,7 @@ User = get_user_model()
 class EventListAPIView(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-    
+   
     def get(self, request):
         events = Event.objects.all()
         serializer = EventSerializer(events, many=True)
@@ -36,11 +36,13 @@ class EventListAPIView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class EventDetailAPIView(generics.RetrieveAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
 
 class BookingCreateAPIView(generics.CreateAPIView):
     queryset = Booking.objects.all()
@@ -48,11 +50,13 @@ class BookingCreateAPIView(generics.CreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
+
 class BookingDetailAPIView(generics.RetrieveAPIView):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
 
 class UserDetailAPIView(generics.RetrieveAPIView):
     queryset = User.objects.all()

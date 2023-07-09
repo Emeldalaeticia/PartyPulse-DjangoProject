@@ -1,36 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-
     <h1>Your Booked Events</h1>
-    {% if bookings %}
-        <ul>
-            {% for booking in bookings %}
-                <li>
-                    <strong>{{ booking.event.title }}</strong>
-                    <br>
-                    Date: {{ booking.event.date }}
-                    <br>
-                    Time: {{ booking.event.time }}
-                    <br>
-                    Location: {{ booking.event.location }}
-                    <br>
-                    Category: {{ booking.event.category }}
-                    <br>
-                    Description: {{ booking.event.description }}
-                    <br>
-                    Price: {{ booking.event.ticket_price }}
-                    <br>
-                    Organizer: {{ booking.event.organizer }}
-                    <br>
-
-                    <a href="{% url 'events:delete_booking' booking.id %}">Delete Booking</a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No events booked.</p>
-    {% endif %}
+        <div class="alert alert-dismissible alert-warning">
+        
+            {% if bookings %}
+                <ul>
+                    {% for booking in bookings %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <h2 class="text-dark" >{{ booking.event.title }}:</h2>
+                            <br>
+                            Date: {{ booking.event.date }}
+                            <br>
+                            Time: {{ booking.event.time }}
+                            <br>
+                            Location: {{ booking.event.location }}
+                            <br>
+                            Category: {{ booking.event.category }}
+                            <br>
+                            Description: {{ booking.event.description }}
+                            <br>
+                            Price: {{ booking.event.ticket_price }}
+                            <br>
+                            Organizer: {{ booking.event.organizer }}
+                            <br>
+                            <span class="badge bg-danger rounded-pill">Booked</span>
+                            <button type="button" class="btn btn-danger"><a href="{% url 'events:delete_booking' booking.id %}">Delete Booking</a></button>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No events booked.</p>
+            {% endif %}
+        </div>
 
 {% endblock %}
+
+
